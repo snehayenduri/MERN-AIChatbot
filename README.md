@@ -9,9 +9,24 @@ It's a completely secure application using JWT Tokens, HTTP-Only Cookies, Signed
 
 Contributions are welcome
 
-# Backend
+# Backend 
+# install all packages - npm i
+# cmd to start - npm run dev
 Setup Node, Express with Typescript
 
 Integrate MongoDB Database
 
 Get API keys from openAI portal (https://platform.openai.com/apps)
+
+
+# Frontend
+# install vite - npm create vite@latest
+# Install material ui from https://mui.com/material-ui/getting-started/
+# cmd for installing material ui - npm install @mui/material @emotion/react @emotion/styled
+# Install icons from react icons - https://react-icons.github.io/react-icons/
+# cmd for installing react icons - npm install react-icons --save
+# cmd for installing react routing - npm install react-router-dom
+# cmd for installing react hot toast for notification - npm install react-hot-toast
+# Using context api for state management instead of redux
+# cmd to start - npm run dev
+
