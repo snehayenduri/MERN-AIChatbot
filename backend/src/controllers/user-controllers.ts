@@ -9,8 +9,20 @@ export const getAllUsers = async (req: Request,res: Response,next: NextFunction)
       const users = await User.find();
       return res.status(200).json({ message: "OK", users });
     } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: "ERROR", cause: error.message });
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response:', error.response.data);
+        console.error('Status:', error.response.status);
+        console.error('Headers:', error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Error request:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+      }
+      console.error('Config:', error.config);
     }
   };
 
@@ -79,5 +91,52 @@ export const userLogin = async (req: Request,res: Response,next: NextFunction) =
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "ERROR", cause: error.message });
+  }
+};
+
+export const verifyUser = async (req: Request,res: Response,next: NextFunction) => {
+  try { 
+    const usr = await User.findById(res.locals.jwtData.id);
+    if(!usr){
+      return res.status(401).send("User is not registered or Token Malfunctioned"); 
+    }
+    if(usr._id.toString() !== res.locals.jwtData.id){
+      return res.status(401).send("Permissions didn't match"); 
+    }
+    return res.status(200).json({ message: "OK", name: usr.name, email: usr.email});
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "ERROR", cause: error.message });
+  }
+};
+
+export const userLogout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    //user token check
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      return res.status(401).send("User not registered OR Token malfunctioned");
+    }
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send("Permissions didn't match");
+    }
+
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: true,
+      domain: "localhost",
+      signed: true,
+      path: "/",
+    });
+
+    return res
+      .status(200)
+      .json({ message: "OK", name: user.name, email: user.email });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({ message: "ERROR", cause: error.message });
   }
 };

@@ -28,5 +28,7 @@ Get API keys from openAI portal (https://platform.openai.com/apps)
 # cmd for installing react routing - npm install react-router-dom
 # cmd for installing react hot toast for notification - npm install react-hot-toast
 # Using context api for state management instead of redux
+# npm i axios
 # cmd to start - npm run dev
+
 
